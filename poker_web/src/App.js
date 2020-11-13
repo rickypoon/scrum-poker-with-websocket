@@ -2,6 +2,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import './App.css';
 import { ListGroup, Button } from 'react-bootstrap';
 import { useState } from 'react';
+import axios from 'axios';
 
 function PointSelectOptions() {
   return (
@@ -23,9 +24,23 @@ function PointSelectOptions() {
 function App() {
   const [activeStoryId, setActiveStoryId] = useState(0);
   const [point, setPoint] = useState('');
+  const [summary, setSummary] = useState('');
 
   const onPointSelected = event => {
-    alert(event.target.value);
+    const storyId = event.target.value;
+
+    axios.get('http://localhost:8080/summary', {
+      params: {
+        storyId: storyId
+      }
+    })
+    .then((res) => {
+      setSummary(res.data);
+      console.log(res.data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
   }
 
   const onStoryClicked = event => {
@@ -46,7 +61,7 @@ function App() {
               </select>
             </div>
           </div>
-          <p class="mb-1">A gave 2 points, B gave 2 points, B gave 3 points</p>
+          <p class="mb-1">{summary}</p>
         </ListGroup.Item>
         <ListGroup.Item active={activeStoryId == 2}>
           <div class="d-flex justify-content-between">
@@ -58,7 +73,7 @@ function App() {
               </select>
             </div>
           </div>
-          <p class="mb-1">A gave 2 points, B gave 2 points, B gave 3 points</p>
+          <p class="mb-1">{summary}</p>
         </ListGroup.Item>
         <ListGroup.Item active={activeStoryId == 3}>
           <div class="d-flex justify-content-between">
@@ -70,7 +85,7 @@ function App() {
               </select>
             </div>
           </div>
-          <p class="mb-1">A gave 2 points, B gave 2 points, B gave 3 points</p>
+          <p class="mb-1">{summary}</p>
         </ListGroup.Item>
       </ListGroup>
     </div>
