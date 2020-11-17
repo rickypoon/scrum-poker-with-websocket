@@ -22,7 +22,7 @@ function PointSelect({...props}) {
 }
 
 function App() {
-  const [activeStoryId, setActiveStoryId] = useState(0);
+  const [activeStoryId, setActiveStoryId] = useState("");
   const [userEmail, setUserEmail] = useState('peter@gmail.com');
   const [backlog, setBacklog] = useState([]);
 
@@ -63,19 +63,21 @@ function App() {
 
   return (
     <div className="App">
-      <h1 className="text-center">Sprint backlog</h1>
+      <h1 className="text-center">Scrum Poker</h1>
       <input type="text" onChange={onNameChange} className="form-control mb-1" placeholder="User email"></input>
       <ListGroup>
         {
           backlog.map(story => {
+            let hasActive = (activeStoryId !== "");
             let isActive = activeStoryId === story.storyId;
+
             return (
               <ListGroup.Item active={isActive} key={story.storyId}>
                 <div className="d-flex justify-content-between">
                   <h5 className="mb-1">{story.title}</h5>
                   <div>
-                    <Button className="m-1 btn-dark" id={story.storyId} onClick={onStoryClicked}>Make active</Button>
-                      <PointSelect onChange={onPointSelected} disabled={!isActive} />
+                    {hasActive || <Button className="m-1 btn-dark" id={story.storyId} onClick={onStoryClicked}>Set as active</Button>}
+                    {isActive && <><label className="p-1">Estimation</label><PointSelect onChange={onPointSelected} disabled={!isActive}/></> }
                   </div>
                 </div>
                 <p className="mb-1">{story.description}</p>
