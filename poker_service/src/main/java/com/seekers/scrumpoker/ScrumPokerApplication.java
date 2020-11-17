@@ -14,7 +14,9 @@ public class ScrumPokerApplication {
 		return new WebMvcConfigurer() {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/summary").allowedOrigins("http://localhost:3000");
+				registry.addMapping("/estimate").allowedOrigins("http://localhost:3000");
+				registry.addMapping("/createStory").allowedOrigins("http://localhost:3000");
+				registry.addMapping("/createUser").allowedOrigins("http://localhost:3000");
 			}
 		};
 	}
