@@ -1,13 +1,13 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import './App.css';
 import { ListGroup, Button } from 'react-bootstrap';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-function PointSelectOptions() {
+function PointSelect({...props}) {
   return (
-    <>
-      <option hidden disabled selected value></option>
+    <select {...props}>
+      <option hidden></option>
       <option>1</option>
       <option>2</option>
       <option>3</option>
@@ -17,7 +17,7 @@ function PointSelectOptions() {
       <option>21</option>
       <option>no_idea</option>
       <option>resign</option>
-    </>
+    </select>
   );
 }
 
@@ -26,16 +26,16 @@ function App() {
   const [point, setPoint] = useState(0);
   const [summary, setSummary] = useState('');
   const [userEmail, setUserEmail] = useState('peter@gmail.com');
+  const [backlog, setBacklog] = useState([]);
 
   const onPointSelected = event => {
     const point = event.target.value;
 
-    axios.get('http://localhost:8080/estimate', {
-      params: {
-        storyId: activeStoryId,
-        userEmail: userEmail,
-        point: point
-      }
+    console.log(activeStoryId, userEmail, point);
+    axios.post('http://localhost:8080/estimate', {
+      storyId: activeStoryId,
+      userEmail: userEmail,
+      point: point
     })
     .then((res) => {
       setSummary(res.data);
@@ -54,47 +54,39 @@ function App() {
     setUserEmail(event.target.value);
   }
 
+  useEffect(() => {
+    axios.get('http://localhost:8080/getAllStory')
+    .then((res) => {
+      console.log(res.data);
+      setBacklog(res.data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  }, []);
+
   return (
     <div className="App">
       <h1 class="text-center">Sprint backlog</h1>
       <input type="text" onChange={onNameChange} class="form-control mb-1" placeholder="User email"></input>
       <ListGroup>
-        <ListGroup.Item active={activeStoryId == "5fb404dc1ce969015951b24a"}>
-          <div class="d-flex justify-content-between">
-            <h5 class="mb-1">implement chat feature</h5>
-            <div>
-              <Button className="m-1 btn-dark" id="5fb404dc1ce969015951b24a" onClick={onStoryClicked}>Make active</Button>
-              <select onChange={onPointSelected} disabled={activeStoryId != "5fb404dc1ce969015951b24a"}>
-                <PointSelectOptions />
-              </select>
-            </div>
-          </div>
-          <p class="mb-1">{summary}</p>
-        </ListGroup.Item>
-        <ListGroup.Item active={activeStoryId == 2}>
-          <div class="d-flex justify-content-between">
-            <h5 class="mb-1">add social login</h5>
-            <div>
-              <Button className="m-1 btn-dark" id="2" onClick={onStoryClicked}>Make active</Button>
-              <select onChange={onPointSelected} disabled={activeStoryId != 2}>
-                <PointSelectOptions />
-              </select>
-            </div>
-          </div>
-          <p class="mb-1">{summary}</p>
-        </ListGroup.Item>
-        <ListGroup.Item active={activeStoryId == 3}>
-          <div class="d-flex justify-content-between">
-            <h5 class="mb-1">implement profile pic upload</h5>
-            <div>
-              <Button className="m-1 btn-dark" id="3" onClick={onStoryClicked}>Make active</Button>
-              <select onChange={onPointSelected} disabled={activeStoryId != 3}>
-                <PointSelectOptions />
-              </select>
-            </div>
-          </div>
-          <p class="mb-1">{summary}</p>
-        </ListGroup.Item>
+        {
+          backlog.map(story => {
+            let isActive = activeStoryId == story.storyId;
+            return (
+              <ListGroup.Item active={isActive}>
+                <div class="d-flex justify-content-between">
+                  <h5 class="mb-1">{story.title}</h5>
+                  <div>
+                    <Button className="m-1 btn-dark" id={story.storyId} onClick={onStoryClicked}>Make active</Button>
+                      <PointSelect onChange={onPointSelected} value="" disabled={!isActive} />
+                  </div>
+                </div>
+                <p class="mb-1">{story.description}</p>
+              </ListGroup.Item>
+            );
+          })
+        }
       </ListGroup>
     </div>
   );
