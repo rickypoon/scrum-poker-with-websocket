@@ -25,7 +25,7 @@ function App() {
   const [activeStoryId, setActiveStoryId] = useState(0);
   const [point, setPoint] = useState(0);
   const [summary, setSummary] = useState('');
-  const [user, setUser] = useState('peter@gmail.com');
+  const [userEmail, setUserEmail] = useState('peter@gmail.com');
 
   const onPointSelected = event => {
     const point = event.target.value;
@@ -33,7 +33,7 @@ function App() {
     axios.get('http://localhost:8080/estimate', {
       params: {
         storyId: activeStoryId,
-        user: user,
+        userEmail: userEmail,
         point: point
       }
     })
@@ -51,7 +51,7 @@ function App() {
   }
 
   const onNameChange = event => {
-    setUser(event.target.value);
+    setUserEmail(event.target.value);
   }
 
   return (
@@ -59,12 +59,12 @@ function App() {
       <h1 class="text-center">Sprint backlog</h1>
       <input type="text" onChange={onNameChange} class="form-control mb-1" placeholder="User email"></input>
       <ListGroup>
-        <ListGroup.Item active={activeStoryId == 1}>
+        <ListGroup.Item active={activeStoryId == "5fb404dc1ce969015951b24a"}>
           <div class="d-flex justify-content-between">
             <h5 class="mb-1">implement chat feature</h5>
             <div>
-              <Button className="m-1 btn-dark" id="1" onClick={onStoryClicked}>Make active</Button>
-              <select onChange={onPointSelected} disabled={activeStoryId != 1}>
+              <Button className="m-1 btn-dark" id="5fb404dc1ce969015951b24a" onClick={onStoryClicked}>Make active</Button>
+              <select onChange={onPointSelected} disabled={activeStoryId != "5fb404dc1ce969015951b24a"}>
                 <PointSelectOptions />
               </select>
             </div>
