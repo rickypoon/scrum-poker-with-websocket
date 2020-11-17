@@ -7,7 +7,7 @@ import com.seekers.scrumpoker.repository.EstimationRepository;
 import com.seekers.scrumpoker.repository.StoryRepository;
 import com.seekers.scrumpoker.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,10 +24,10 @@ public class EstimationController {
         this.userRepository = userRepository;
     }
 
-    @GetMapping("/estimate")
-    public void getSummary(@RequestParam(value = "storyId") String storyId,
-                             @RequestParam(value = "userEmail") String userEmail,
-                             @RequestParam(value = "point") String point) {
+    @PostMapping("/estimate")
+    public void estimate(@RequestParam(value = "storyId") String storyId,
+                            @RequestParam(value = "userEmail") String userEmail,
+                            @RequestParam(value = "point") String point) {
         Story story = storyRepository.findById(storyId).orElse(null);
         User user = userRepository.findById(userEmail).orElse(null);
         if (story == null || user == null) {
