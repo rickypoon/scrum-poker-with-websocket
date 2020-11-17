@@ -23,15 +23,18 @@ function PointSelectOptions() {
 
 function App() {
   const [activeStoryId, setActiveStoryId] = useState(0);
-  const [point, setPoint] = useState('');
+  const [point, setPoint] = useState(0);
   const [summary, setSummary] = useState('');
+  const [user, setUser] = useState('peter@gmail.com');
 
   const onPointSelected = event => {
-    const storyId = event.target.value;
+    const point = event.target.value;
 
-    axios.get('http://localhost:8080/summary', {
+    axios.get('http://localhost:8080/estimate', {
       params: {
-        storyId: storyId
+        storyId: activeStoryId,
+        user: user,
+        point: point
       }
     })
     .then((res) => {
@@ -47,9 +50,14 @@ function App() {
     setActiveStoryId(event.target.id);
   }
 
+  const onNameChange = event => {
+    setUser(event.target.value);
+  }
+
   return (
     <div className="App">
       <h1 class="text-center">Sprint backlog</h1>
+      <input type="text" onChange={onNameChange} class="form-control mb-1" placeholder="User email"></input>
       <ListGroup>
         <ListGroup.Item active={activeStoryId == 1}>
           <div class="d-flex justify-content-between">
