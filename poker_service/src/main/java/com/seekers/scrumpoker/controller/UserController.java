@@ -4,8 +4,10 @@ import com.seekers.scrumpoker.model.User;
 import com.seekers.scrumpoker.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
 
 @RestController
 public class UserController {
@@ -17,8 +19,8 @@ public class UserController {
     }
 
     @PostMapping("/createUser")
-    public String createUser(@RequestParam(value = "userEmail") String userEmail) {
-        User user = userRepository.save(new User(userEmail));
+    public String createUser(@RequestBody Map<String, String> params) {
+        User user = userRepository.save(new User(params.get("userEmail")));
         return "User successfully created with email: " + user.getEmail();
     }
 }

@@ -3,12 +3,10 @@ package com.seekers.scrumpoker.controller;
 import com.seekers.scrumpoker.model.Story;
 import com.seekers.scrumpoker.repository.StoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class StoryController {
@@ -20,10 +18,8 @@ public class StoryController {
     }
 
     @PostMapping("/createStory")
-    public String createStory(@RequestParam(value = "storyId") String storyId,
-                              @RequestParam(value = "title") String title,
-                              @RequestParam(value = "description") String description) {
-        Story story = storyRepository.save(new Story(storyId, title, description));
+    public String createStory(@RequestBody Map<String, String> params) {
+        Story story = storyRepository.save(new Story(params.get("storyId"), params.get("title"), params.get("description")));
         return "Story successfully created with title: " + story.getTitle();
     }
 
