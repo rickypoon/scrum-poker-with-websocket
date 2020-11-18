@@ -43,7 +43,20 @@ function App() {
   }
 
   const onStoryClicked = event => {
-    setActiveStoryId(event.target.id);
+    let storyId = event.target.id;
+
+    axios.post('http://localhost:8080/setActiveStory', {
+      storyId: storyId,
+      userEmail: userEmail
+    })
+    .then(() => {
+      console.log("Attempt to set active (StoryId):", storyId);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+
+    setActiveStoryId(storyId);
   }
 
   const onNameChange = event => {
@@ -63,7 +76,7 @@ function App() {
 
   return (
     <div className="App">
-      <h1 className="text-center">Scrum Poker</h1>
+      {/* <h1 className="text-center">Scrum Poker</h1> */}
       <input type="text" onChange={onNameChange} className="form-control mb-1" placeholder="User email"></input>
       <ListGroup>
         {
