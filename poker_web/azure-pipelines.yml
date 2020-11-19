@@ -1,6 +1,12 @@
 pool:
   vmImage: 'ubuntu-16.04'
-trigger:
+variables:
+  - name: working-dir
+    value: 'poker_web/'
+  trigger:
+  branches:
+    include:
+      - master
   paths:
     include: # Include!
       - 'poker_web/*'
@@ -11,16 +17,20 @@ steps:
       SourceFolder: deployment
       Contents: '*.json'
       TargetFolder: '$(build.artifactstagingdirectory)/Templates'
+    workingDirectory: $(working-dir)
   - task: Npm@1
     displayName: 'npm custom'
     inputs:
       command: custom
       verbose: false
       customCommand: 'install --production'
+    workingDirectory: $(working-dir)  
   - task: ArchiveFiles@2
     displayName: 'Archive $(Build.SourcesDirectory)'
     inputs:
       rootFolderOrFile: '$(Build.SourcesDirectory)'
       includeRootFolder: false
+    workingDirectory: $(working-dir)
   - task: PublishBuildArtifacts@1
     displayName: 'Publish Artifact: drop'
+    workingDirectory: $(working-dir)
