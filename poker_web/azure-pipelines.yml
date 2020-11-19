@@ -3,7 +3,7 @@ pool:
 variables:
   - name: working-dir
     value: 'poker_web/'
-  trigger:
+trigger:
   branches:
     include:
       - master
@@ -17,20 +17,17 @@ steps:
       SourceFolder: deployment
       Contents: '*.json'
       TargetFolder: '$(build.artifactstagingdirectory)/Templates'
-    workingDirectory: $(working-dir)
   - task: Npm@1
     displayName: 'npm custom'
     inputs:
       command: custom
       verbose: false
       customCommand: 'install --production'
-    workingDirectory: $(working-dir)  
+      workingDir: $(working-dir)
   - task: ArchiveFiles@2
     displayName: 'Archive $(Build.SourcesDirectory)'
     inputs:
       rootFolderOrFile: '$(Build.SourcesDirectory)'
       includeRootFolder: false
-    workingDirectory: $(working-dir)
   - task: PublishBuildArtifacts@1
     displayName: 'Publish Artifact: drop'
-    workingDirectory: $(working-dir)
