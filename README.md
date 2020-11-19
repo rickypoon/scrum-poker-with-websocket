@@ -5,7 +5,8 @@ Steps to start the app:
 
  1. install mongodb locally (make it able to be connected by "mongodb://localhost:27017/scrumpoker" without authentication, where scrumpoker is the database name
  2. open command prompt and run `./start_all.bat`
- 3. access the webapp through localhost:3000/login
+ 3. create stories in DB by calling the API `POST http://localhost:8080/createStory` with request body `{"storyId": '001', "title": 'Story title', "description": 'Story description'}`
+ 4. access the webapp through localhost:3000/login
 
 # hr-fullstack-test
 
