@@ -1,3 +1,12 @@
+
+[![Build Status](https://dev.azure.com/wkpoon/seekers/_apis/build/status/rickypoon.hr-fullstack-test?branchName=master)](https://dev.azure.com/wkpoon/seekers/_build/latest?definitionId=1&branchName=master)
+
+Steps to start the app:
+
+ 1. install mongodb locally (make it able to be connected by "mongodb://localhost:27017/scrumpoker" without authentication, where scrumpoker is the database name
+ 2. open command prompt and run `./start_all.bat`
+ 3. access the webapp through localhost:3000/login
+
 # hr-fullstack-test
 
 ## Full Stack Technical Test: Scrum Poker
