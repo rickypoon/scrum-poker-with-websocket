@@ -1,16 +1,24 @@
 package com.seekers.scrumpoker.model;
 
-import com.seekers.scrumpoker.model.Story;
-import com.seekers.scrumpoker.model.User;
-import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+@Data
 @Document
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class Estimation {
+    @Id
+    String Id;
+
+    @NonNull
     Story story;
 
+    @NonNull
     User user;
 
+    @NonNull
     String point;
 }

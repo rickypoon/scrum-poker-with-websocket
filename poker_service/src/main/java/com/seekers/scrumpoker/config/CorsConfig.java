@@ -18,6 +18,7 @@ public class CorsConfig {
                 registry.addMapping("/getAllStory").allowedOrigins("http://localhost:3000");
                 registry.addMapping("/setActiveStory").allowedOrigins("http://localhost:3000");
                 registry.addMapping("/getActiveStory").allowedOrigins("http://localhost:3000");
+                registry.addMapping("/websocket").allowedOrigins("http://localhost:3000");
             }
         };
     }

@@ -2,11 +2,11 @@ package com.seekers.scrumpoker.model;
 
 import lombok.Data;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Date;
+
 @Document
-@RequiredArgsConstructor
 @Data
 public class ActiveStoryHistory {
     @NonNull
@@ -14,4 +14,17 @@ public class ActiveStoryHistory {
 
     @NonNull
     String userEmail;
+
+    @NonNull
+    String action;
+
+    @NonNull
+    Date createdDate;
+
+    public ActiveStoryHistory(String storyId, String userEmail, String action) {
+        this.storyId = storyId;
+        this.userEmail = userEmail;
+        this.action = action;
+        this.createdDate = new Date();
+    }
 }
