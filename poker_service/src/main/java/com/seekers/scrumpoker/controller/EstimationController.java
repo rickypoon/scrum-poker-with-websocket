@@ -26,9 +26,6 @@ public class EstimationController {
     private final ActiveStoryHistoryRepository activeStoryHistoryRepository;
 
     @Autowired
-    ActiveStoryController activeStoryController;
-
-    @Autowired
     public EstimationController(EstimationRepository estimationRepository, StoryRepository storyRepository, UserRepository userRepository, ActiveStoryHistoryRepository activeStoryHistoryRepository) {
         this.estimationRepository = estimationRepository;
         this.storyRepository = storyRepository;
@@ -50,7 +47,7 @@ public class EstimationController {
         String userEmail = estimationMap.get("userEmail");
         String point = estimationMap.get("point");
 
-        if (storyId == null || userEmail == null) {
+        if (storyId == null || userEmail == null || point == null) {
             return "";
         }
 
@@ -62,22 +59,29 @@ public class EstimationController {
         Estimation estimation = new Estimation(story, user, point);
         estimationRepository.save(estimation);
 
-        List<AggregationResult> estimationList = estimationRepository.groupByStoryAndUserEmailWithLastEstimation().stream().filter(e -> e.getKey().getStory().getStoryId().equals(storyId)).collect(Collectors.toList());
+        return getSummary(storyId);
+    }
+
+    private String getSummary(String storyId) {
+        List<AggregationResult> estimationList = estimationRepository.groupByStoryAndUserEmailWithLastEstimation().stream()
+                .filter(e -> e.getKey().getStory().getStoryId().equals(storyId)).collect(Collectors.toList());
 
         List<User> allUsers = userRepository.findAll();
         if (estimationList.stream().map(e -> e.getKey().getUser()).collect(Collectors.toList()).containsAll(allUsers)) {
-            activeStoryHistoryRepository.save(new ActiveStoryHistory(storyId, "SYSTEM", "RESET"));
-            return getSummary(storyId, estimationList);
+            markFinishForStoryEstimation(storyId);
+            return constructSummary(storyId, estimationList);
         }
 
         return "";
     }
 
-    private String getSummary(String storyId, List<AggregationResult> estimationList) {
-        String summary = String.join(", ", estimationList.stream().map(estimation -> String.format("%s gave %s points", estimation.getKey().getUser().getEmail(), estimation.getPoint())).collect(Collectors.toList()));
-        String summaryJson = String.format("{\"storyId\":\"%s\", \"summary\":\"%s\"}", storyId, summary);
-        return summaryJson;
+    private String constructSummary(String storyId, List<AggregationResult> estimationList) {
+        String summary = String.join(", ", estimationList.stream().map(estimation ->
+                String.format("%s gave %s points", estimation.getKey().getUser().getEmail(), estimation.getPoint())).collect(Collectors.toList()));
+        return String.format("{\"storyId\":\"%s\", \"summary\":\"%s\"}", storyId, summary);
     }
 
-
+    private void markFinishForStoryEstimation(String storyId) {
+        activeStoryHistoryRepository.save(new ActiveStoryHistory(storyId, "SYSTEM", "RESET"));
+    }
 }

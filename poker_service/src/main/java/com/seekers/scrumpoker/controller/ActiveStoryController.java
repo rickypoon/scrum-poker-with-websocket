@@ -7,12 +7,7 @@ import com.seekers.scrumpoker.repository.StoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Map;
 
 @RestController
 public class ActiveStoryController {
@@ -25,13 +20,6 @@ public class ActiveStoryController {
         this.storyRepository = storyRepository;
     }
 
-    @PostMapping("/setActiveStory")
-    public String createStory(@RequestBody Map<String, String> params) {
-        ActiveStoryHistory activeStoryHistory = activeStoryHistoryRepository.save(new ActiveStoryHistory(params.get("storyId"), params.get("userEmail"), "PICK"));
-        return "Attempt to set active (storyId): " + activeStoryHistory.getStoryId();
-    }
-
-    @GetMapping("/getActiveStory")
     public Story getActiveStory() {
         ActiveStoryHistory lastResetRecord = activeStoryHistoryRepository.findFirstByActionOrderByCreatedDateDesc("RESET");
         ActiveStoryHistory activeStory;
