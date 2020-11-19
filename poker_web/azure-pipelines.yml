@@ -1,7 +1,9 @@
 pool:
   vmImage: 'ubuntu-16.04'
 trigger:
-  - master
+  paths:
+    include: # Include!
+      - 'poker_web/*'
 steps:
   - task: CopyFiles@2
     displayName: 'Copy Files to: $(build.artifactstagingdirectory)/Templates'
