@@ -25,9 +25,9 @@ steps:
       customCommand: 'install --production'
       workingDir: $(working-dir)
   - task: ArchiveFiles@2
-    displayName: 'Archive $(Build.BinariesDirectory)'
+    displayName: 'Archive'
     inputs:
-      rootFolderOrFile: '$(Build.BinariesDirectory)'
+      # rootFolderOrFile: '$(Build.BinariesDirectory)'
       includeRootFolder: false
   - task: PublishBuildArtifacts@1
     displayName: 'Publish Artifact: drop'
